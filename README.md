@@ -26,8 +26,8 @@ class s4.clarity.LIMS(root_uri, username, password, dry_run=False, insecure=Fals
 ```
 > insecure (bool) – Disables SSL validation. Default false.
 
-To get get around this, you may need to temporarily modify the Python Requests library.
-> I needed to modify this file: /usr/local/lib/python3.9/site-packages/requests/sessions.py
+To get get around this, you may need to temporarily modify the Python Requests library. I needed to modify this file: `/usr/local/lib/python3.9/site-packages/requests/sessions.py`
+sessions.py: 
 ```sh
 #: SSL Verification default.
 #: Defaults to `True`, requiring requests to verify the TLS certificate at the
