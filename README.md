@@ -1,5 +1,5 @@
 # lims-update-product-id
-Update ProductID's for samples in the VSeq and Exome+ workflow.
+Update ProductID udf attached to submitted samples in the VSeq and Exome+ workflows. 
 
 ## Usage
 The script takes the LIMS username and password, Root URI for the API, File Name, and the new ProductID parameters as command-line arguments.
@@ -13,7 +13,34 @@ python3 update_product_id.py -u {username} -p {password} -r https://test.lims.lu
 ### CSV File
 The script takes the list of samples from a csv file. The csv should not contain a header. Each row should contain a single sample and all samples should be within the first column. 
 
-> Note: `.` .
+> Note: As suggested by Semaphore, the list will be split into groups of `96 samples` because the `query()` and `batch_update()` operations can fail with too large a number of samples.
+## Errors
+You may come across:
+```sh
+ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate
+```
+
+By default SSL validation is disabled. 
+```sh
+class s4.clarity.LIMS(root_uri, username, password, dry_run=False, insecure=False, log_requests=False, timeout=None)
+```
+> insecure (bool) – Disables SSL validation. Default false.
+
+To get get around this, you may need to temporarily modify the Python Requests library.
+> Mine is located: /usr/local/lib/python3.9/site-packages/requests/sessions.py
+```sh
+#: SSL Verification default.
+#: Defaults to `True`, requiring requests to verify the TLS certificate at the
+#: remote end.
+#: If verify is set to `False`, requests will accept any TLS certificate
+#: presented by the server, and will ignore hostname mismatches and/or
+#: expired certificates, which will make your application vulnerable to
+#: man-in-the-middle (MitM) attacks.
+#: Only set this to `False` for testing.
+self.verify = True
+```
+Setting `self.verify = False` and re-run the script.
+
 ## Reference
 - [S4-Clarity Library] - The S4-Clarity library lets developers interact with the Clarity API
 -  [Clarity API] - The REST Data Access Web Service is the fundamental interface in the GenoLogics Rapid Scripting API.
