@@ -20,14 +20,14 @@ You may come across:
 ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate
 ```
 
-By default SSL validation is disabled. 
+By default SSL validation is disabled, but for some reason it still attempts to validate. 
 ```sh
 class s4.clarity.LIMS(root_uri, username, password, dry_run=False, insecure=False, log_requests=False, timeout=None)
 ```
 > insecure (bool) – Disables SSL validation. Default false.
 
 To get get around this, you may need to temporarily modify the Python Requests library.
-> Mine is located: /usr/local/lib/python3.9/site-packages/requests/sessions.py
+> I needed to modify this file: /usr/local/lib/python3.9/site-packages/requests/sessions.py
 ```sh
 #: SSL Verification default.
 #: Defaults to `True`, requiring requests to verify the TLS certificate at the
